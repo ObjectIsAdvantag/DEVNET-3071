@@ -5,7 +5,7 @@
 //
 module.exports = function (controller) {
 
-    controller.hears(['quiz'], 'direct_message,direct_mention', function (bot, message) {
+    controller.hears(['start'], 'direct_message,direct_mention', function (bot, message) {
 
         bot.createConversation(message, function (err, convo) {
 
@@ -47,9 +47,33 @@ module.exports = function (controller) {
             }, 'cancel');
             
             // Quiz thread
-            convo.addMessage({
-                text: "Let's start",
-            }, 'quiz');
+            convo.addMessage("Let's start", "quiz");
+
+            convo.addQuestion("Question: 5x5=", [
+                {
+                    pattern: "^25$",
+                    callback: function (response, convo) {
+                        convo.gotoThread('success');
+                    },
+                }
+                , {
+                    pattern: "cancel|stop|exit",
+                    callback: function (response, convo) {
+                        convo.gotoThread('cancel');
+                    },
+                }
+                , {
+                    default: true,
+                    callback: function (response, convo) {
+                        convo.say("Sorry, wrong answer. Try again!");
+                        convo.repeat();
+                        convo.next();
+                    }
+                }
+            ], {}, 'quiz');
+
+            // Succes thread
+            convo.addMessage("Congrats, you did it!", "success");
 
             convo.activate();
         });
