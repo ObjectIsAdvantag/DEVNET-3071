@@ -5,30 +5,29 @@
 //
 module.exports = function (controller) {
 
-    controller.hears(['quizz'], 'direct_message,direct_mention', function (bot, message) {
+    controller.hears(['quiz'], 'direct_message,direct_mention', function (bot, message) {
 
         bot.createConversation(message, function (err, convo) {
 
+            // Default thread
             convo.ask("Ready for a challenge (yes/no/cancel)", [
                 {
                     pattern: "yes|yeh|sure|oui|si",
                     callback: function (response, convo) {
-                        convo.say("Let's start");
-                        convo.next();
+                        convo.gotoThread('quiz');
                     },
                 }
                 , {
                     pattern: "no|neh|non|na|birk",
                     callback: function (response, convo) {
-                        convo.say("Too bad, looking forward to play with you");
+                        convo.say("Too bad, looking forward to play with you later...");
                         convo.next();
                     },
                 }
                 , {
                     pattern: "cancel|stop|exit",
                     callback: function (response, convo) {
-                        convo.say("Got it, cancelling...");
-                        convo.next();
+                        convo.gotoThread('cancel');
                     },
                 }
                 , {
@@ -40,6 +39,17 @@ module.exports = function (controller) {
                     }
                 }
             ]);
+
+            // Cancel thread
+            convo.addMessage({
+                text: "Got it, cancelling...",
+                action: 'stop', // this marks the converation as unsuccessful
+            }, 'cancel');
+            
+            // Quiz thread
+            convo.addMessage({
+                text: "Let's start",
+            }, 'quiz');
 
             convo.activate();
         });
