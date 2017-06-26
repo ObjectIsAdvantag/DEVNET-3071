@@ -56,9 +56,10 @@ module.exports = function (controller) {
             // Quiz thread
             convo.addMessage("Let's start", "quiz");
 
-            convo.addQuestion("Question: 5x5=", [
+            var challenge = pickChallenge();
+            convo.addQuestion("Question: " + challenge.question, [
                 {
-                    pattern: "^25$",
+                    pattern: "^"+ challenge.answer + "$",
                     callback: function (response, convo) {
                         convo.gotoThread('success');
                     },
@@ -89,3 +90,11 @@ module.exports = function (controller) {
         });
     });
 };
+
+
+function pickChallenge() {
+    return {
+        question : "5x5=",
+        answer : "25"
+    }
+}
