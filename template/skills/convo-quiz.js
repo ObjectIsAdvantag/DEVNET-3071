@@ -93,8 +93,10 @@ module.exports = function (controller) {
 
 
 function pickChallenge() {
+    var a = Math.round(Math.random()*5) + 4;
+    var b = Math.round(Math.random()*5) + 4;
     return {
-        question : "5x5=",
-        answer : "25"
+        question : "" + a + " x " + b + " =",
+        answer : "" + (a * b)
     }
 }
