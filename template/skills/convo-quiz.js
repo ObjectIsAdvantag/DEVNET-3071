@@ -14,6 +14,13 @@ module.exports = function (controller) {
                 {
                     pattern: "yes|yeh|sure|oui|si",
                     callback: function (response, convo) {
+
+                        // Apply elaps time (in milliseconds) to next askQuestion
+                        convo.setTimeout(5000);
+                        convo.onTimeout(function (convo) {
+                            convo.gotoThread("missed");
+                        });
+
                         convo.gotoThread('quiz');
                     },
                 }
@@ -45,7 +52,7 @@ module.exports = function (controller) {
                 text: "Got it, cancelling...",
                 action: 'stop', // this marks the converation as unsuccessful
             }, 'cancel');
-            
+
             // Quiz thread
             convo.addMessage("Let's start", "quiz");
 
@@ -74,6 +81,9 @@ module.exports = function (controller) {
 
             // Succes thread
             convo.addMessage("Congrats, you did it!", "success");
+
+            // Succes thread
+            convo.addMessage("Too bad, you missed this one", "missed");
 
             convo.activate();
         });
