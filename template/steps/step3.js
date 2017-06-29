@@ -72,7 +72,7 @@ module.exports = function (controller) {
                 }
             ], {}, 'quiz');
 
-            // Succes thread
+            // Success thread
             convo.addMessage("Congrats, you did it!", "success");
 
             convo.activate();

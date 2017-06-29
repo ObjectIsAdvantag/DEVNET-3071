@@ -5,7 +5,7 @@
 //
 module.exports = function (controller) {
 
-    controller.hears(['start'], 'direct_message,direct_mention', function (bot, message) {
+    controller.hears(['quiz'], 'direct_message,direct_mention', function (bot, message) {
 
         bot.createConversation(message, function (err, convo) {
 
@@ -80,10 +80,10 @@ module.exports = function (controller) {
                 }
             ], {}, 'quiz');
 
-            // Succes thread
+            // Success thread
             convo.addMessage("Congrats, you did it!", "success");
 
-            // Succes thread
+            // Failed thread
             convo.addMessage("Too bad, you missed this one", "missed");
 
             convo.activate();
